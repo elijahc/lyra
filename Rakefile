@@ -7,7 +7,7 @@ compose_files = {
 }
 COMPOSE = compose_files[docker_env]
 
-load './users-service/users-service-tasks.rake'
+load './services/users/users-service-tasks.rake'
 
 desc 'bring services up'
 task :up do
@@ -17,8 +17,9 @@ end
 desc 'build services'
 task :build do
   system %(docker-compose -f #{COMPOSE} up -d --build)
-  Rake::Task['db:seed'].invoke
-  Rake::Task['test'].invoke
+  Rake::Task['db:recreate'].execute
+  Rake::Task['db:seed'].execute
+  Rake::Task['test'].execute
 end
 task :rebuild => :build
 
@@ -27,6 +28,11 @@ task :rebuild => :build
   task t do
     system %(docker-compose -f #{COMPOSE} #{t})
   end
+end
+
+desc 'env variable for REACT'
+task :react_env do
+  puts "export REACT_APP_USERS_SERVICE_URL=http://$(dm ip #{docker_env})"
 end
 
 task :default => :test

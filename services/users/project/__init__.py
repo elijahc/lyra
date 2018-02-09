@@ -1,9 +1,19 @@
+# users/project/__init__.py
+
+
 import os
+
+from flask_cors import CORS
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_migrate import Migrate
 
+
+# instantiate the db
 db = SQLAlchemy()
+# instantiate flask migrate
+migrate = Migrate()
+
 
 def create_app():
 
@@ -17,7 +27,9 @@ def create_app():
     app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
 
+    # set up extensions
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # register blueprints
     from project.api.users import users_blueprint
