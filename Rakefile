@@ -1,27 +1,31 @@
-#!/usr/bin/env rake
+docker_env = ENV['DOCKER_MACHINE_NAME']
+raise 'No active docker-machine!' unless docker_env
 
-task :shout do
-  system %(tree)
+compose_files = {
+  'lyra-dev'=>'docker-compose-dev.yml',
+  'lyra-prod'=>'docker-compose-prod.yml'
+}
+COMPOSE = compose_files[docker_env]
+
+load './users-service/users-service-tasks.rake'
+
+desc 'bring services up'
+task :up do
+  system %(docker-compose -f #{COMPOSE} up -d)
 end
-namespace :dev do
-  task :restart do
-    system %(docker-compose -f docker-compose.yml restart)
-  end
 
-  task :down do
-    system %(docker-compose -f docker-compose.yml down)
-  end
+desc 'build services'
+task :build do
+  system %(docker-compose -f #{COMPOSE} up -d --build)
+  Rake::Task['test'].invoke
+end
+task :rebuild => :build
 
-  task :up do
-    system %(docker-compose -f docker-compose.yml up -d)
-  end
-
-  task :rebuild do
-    system %(docker-compose -f docker-compose.yml up -d --build)
-  end
-
-  task :test do
-    system %(docker-compose -f docker-compose.yml run users-service python manage.py test)
+[:restart, :down, :ps].each do |t|
+  desc "#{t} services"
+  task t do
+    system %(docker-compose -f #{COMPOSE} #{t})
   end
 end
-task :default => :shout
+
+task :default => :test
