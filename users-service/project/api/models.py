@@ -7,6 +7,14 @@ class User(db.Model):
     email = db.Column(db.String(128), nullable=False)
     active = db.Column(db.Boolean(), default=True, nullable=False)
 
+    def to_json(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email,
+            'active': self.active
+        }
+
     def __init__(self, username, email):
         self.username = username
         self.email = email
