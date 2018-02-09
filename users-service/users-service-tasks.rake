@@ -13,12 +13,15 @@ task :cov do
 end
 
 namespace :db do
-  [:seed,:recreate].each do |t|
-      desc "#{t} db"
-      task t, [:up] do
-        manage(COMPOSE,"#{t}_db")
-      end
-  end
+    desc "recreate database" 
+    task :recreate, [:up] do
+      manage(COMPOSE,"recreate_db")
+    end
+
+    desc "seed the database"
+    task :seed, [:recreate] do
+      manage(COMPOSE,"seed_db")
+    end
 end
 
 desc 'run flake8'

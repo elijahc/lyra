@@ -17,6 +17,7 @@ end
 desc 'build services'
 task :build do
   system %(docker-compose -f #{COMPOSE} up -d --build)
+  Rake::Task['db:seed'].invoke
   Rake::Task['test'].invoke
 end
 task :rebuild => :build
