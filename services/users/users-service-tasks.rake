@@ -22,6 +22,13 @@ namespace :db do
     task :seed, [:recreate] do
       manage(COMPOSE,"seed_db")
     end
+
+    [:init,:migrate,:upgrade].each do |t|
+      desc "flask db #{t}"
+      task t do
+        manage(COMPOSE,"db #{t}",'users-service')
+      end
+    end
 end
 
 desc 'run flake8'
