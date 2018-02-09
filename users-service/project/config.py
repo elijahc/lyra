@@ -1,3 +1,5 @@
+import os
+
 class BaseConfig:
     """Base configuration"""
     DEBUG = False
@@ -7,7 +9,7 @@ class BaseConfig:
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')    
 
 class TestingConfig(BaseConfig):
     """Testing configuration"""

@@ -19,7 +19,7 @@ services:
       - users-db
     links:
       - users-db
-      
+
   users-db:
     container_name: users-db
     build:
