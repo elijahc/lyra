@@ -1,10 +1,16 @@
-from flask import Blueprint, jsonify, request,render_template
+# services/users/project/api/users.py
+
+
 from sqlalchemy import exc
+from flask import Blueprint, jsonify, request, render_template
 
 from project.api.models import User
 from project import db
+from project.api.utils import authenticate, is_admin
 
-users_blueprint = Blueprint('users',__name__,template_folder='./templates')
+
+users_blueprint = Blueprint('users', __name__, template_folder='./templates')
+
 
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def index():
@@ -17,20 +23,26 @@ def index():
     users = User.query.all()
     return render_template('index.html', users=users)
 
-@users_blueprint.route('/users/ping',methods=['GET'])
+
+@users_blueprint.route('/users/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
         'status': 'success',
         'message': 'pong!'
-        })
+    })
+
 
 @users_blueprint.route('/users', methods=['POST'])
-def add_user():
+@authenticate
+def add_user(resp):
     post_data = request.get_json()
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
+    if not is_admin(resp):
+        response_object['message'] = 'You do not have permission to do that.'
+        return jsonify(response_object), 401
     if not post_data:
         return jsonify(response_object), 400
     username = post_data.get('username')
@@ -51,6 +63,10 @@ def add_user():
     except exc.IntegrityError as e:
         db.session.rollback()
         return jsonify(response_object), 400
+    except (exc.IntegrityError, ValueError) as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
+
 
 @users_blueprint.route('/users/<user_id>', methods=['GET'])
 def get_single_user(user_id):
@@ -76,6 +92,7 @@ def get_single_user(user_id):
             return jsonify(response_object), 200
     except ValueError:
         return jsonify(response_object), 404
+
 
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_users():
