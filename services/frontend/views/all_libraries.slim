@@ -1,0 +1,18 @@
+div.container
+  .row
+    .col
+      p
+  .row
+    .col
+      h2 All Libraries:
+  .row 
+    .col
+      table.table
+        thead
+          - @disp_attrs.each do |attr|
+            th=attr
+
+        - @libs.each do |lib|
+          tr
+            - @disp_attrs.each do |attr|
+              td #{lib.attributes[attr]}

@@ -1,0 +1,37 @@
+.container
+  .row
+    .col
+      br
+      h2 Library Designer
+      hr
+      br
+
+  form action="/library/create" method="POST"
+    .form-group.row
+      label.col-sm-2.col-form-label for="inputLibraryName" Library Name
+      .col-sm-10
+        input.form-control#inputLibraryName type="text" name='name' placeholder='KRAS_Ala_Scan'
+    .form-group.row
+      label.col-form-lable.col-sm-2 for="inputSubpoolPromoter" Subpool Primer
+      .col-sm-10
+        input.form-control#inputSubpoolPromoter type="text" name='sp_primer'
+    .form-group.row
+      label.col-form-label.col-sm-2 Strategy
+      .col-sm-10
+        select.form-control#inputStrategy name='strategy'
+          option AlanineScan
+    hr
+    .form-group.row
+      label.col-sm-2.col-form-label for="sequence" Gene sequence
+      .col-sm-10
+        textarea.form-control#sequence type='textarea' placeholder="Enter a gene Sequence" name='ref_seq' rows="12"
+    .form-group.row
+      label.col-sm-2.col-form-label for="inputRegionStart" Region
+      .col-sm-5
+        input.form-control#inputRegionStart type="text" name='region_start' placeholder='Start'
+      .col-sm-5
+        input.form-control#inputRegionStop type="text" name='region_stop' placeholder='Stop'
+
+    button type="submit" class="btn btn-primary" Submit
+
+    br

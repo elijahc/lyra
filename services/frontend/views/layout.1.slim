@@ -9,17 +9,13 @@ html
 
       link rel="icon" href="https://v4-alpha.getbootstrap.com/favicon.ico"
       link href="/css/bootstrap.css" rel="stylesheet"
-      link href="/css/signin.css" rel="stylesheet"
     title Lyra
 
-  body.text-center
-    form.form-signin
-      img.mb-4 src="https://i.pinimg.com/originals/90/d6/33/90d6335baa20222a60213e6fa8a6389b.png" alt="" width="144" height="144"
-      label.sr-only for="inputEmail" Email address
-      input.form-control#inputEmail[type="email" placeholder="Email address" required autofocus]
-      label.sr-only for="inputPassword" Password
-      input.form-control#inputPassword[type="password" placeholder="Password" required autofocus]
-      button class="btn btn-lg btn-primary btn-block" type="submit" Sign in
+  body
+    == slim :navbar
+    == yield
+
+
     script src="/js/jquery-3.js"
     / javascript:
     /   window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')
