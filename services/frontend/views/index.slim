@@ -1,0 +1,28 @@
+.container
+  .row
+    .col
+      h1 Hello!
+  .row
+    .col
+      form action="/job/new" method="POST"
+        .form-group
+          label for="inputLibraryName" Library Name
+          input.form-control#inputLibraryName type="text" name='inputLibraryName'
+        .form-group
+          label for="inputGuideRNAPromoter" gRNA Promoter Sequence
+          input.form-control#inputGuideRNAPromoter type="text" name='guide_rna_promoter'
+        .form-group
+          label for="subpoolPromoter" Subpool Promoter
+          input.form-control#inputSubpoolPromoter type="text" name='subpool_promoter'
+
+        .form-group
+          label for="sequence" Gene sequence
+          textarea.form-control#sequence type='textarea' placeholder="Enter a gene Sequence" name='ref_seq' rows="3"
+        .form-group
+          label for="inputRegionStart" Region start
+          input.form-control#inputRegionStart type="text" name='region_start'
+        .form-group
+          label for="inputRegionStop" Region Stop
+          input.form-control#inputRegionStop type="text" name='region_stop'
+
+        button type="submit" class="btn btn-primary" Submit
