@@ -1,6 +1,15 @@
 require 'mongoid'
 require 'roar'
 
+class User
+    include Mongoid::Document
+    include Mongoid::Timestamps
+
+    field :username, type: String
+    field :email, type: String
+    has_many :library
+end
+
 class Library
     include Mongoid::Document
     include Mongoid::Timestamps
@@ -12,7 +21,7 @@ class Library
     field :region_start, type: Integer
     field :region_stop, type: Integer
     field :built, type: Boolean
-    
+    belongs_to :user
 end
 
 module LibraryRepresenter

@@ -3,7 +3,7 @@ require 'slim'
 require 'json'
 # require 'redis'
 # require 'securerandom'
-require 'pry'
+# require 'pry'
 require 'mongoid'
 require 'roar/json/hal'
 require './models/library'
@@ -32,6 +32,7 @@ class Application < Sinatra::Base
   post '/library/create' do
     sym_hash = params.map{|k,v| [k.to_sym,v] }.to_h
     sym_hash[:built]=false
+    user = User.find_or_create_by(:username=>sym_hash[:username])
     lib = Library.new(sym_hash)
     if lib.save
       [201, lib.extend(LibraryRepresenter).to_json]

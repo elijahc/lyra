@@ -6,6 +6,6 @@ while ! nc -z mongodb 27017; do
     sleep 0.1
 done
 
-echo "mongodb started started"
+echo "mongodb started"
 
 bundle exec puma
