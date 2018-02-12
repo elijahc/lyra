@@ -1,24 +1,20 @@
-require 'sinatra'
+require 'sinatra/base'
 require 'slim'
 require 'json'
+require './auth'
 # require 'redis'
 # require 'securerandom'
 # require 'pry'
 require 'mongoid'
 require 'roar/json/hal'
-require './models/library'
 
 class Application < Sinatra::Base
+  register Sinatra::SessionAuth
+
   configure do
     set :bind, '0.0.0.0'
 
-    # redis = Redis.new(url: "redis://redis:6379")
-
-    JOB_Q = 'job.waiting'
-    RUN_Q = 'job.running'
-    DONE_Q = 'job.finished'
-    STATUS = 'status'
-    Mongoid.load!("mongoid.yml", settings.environment)
+    Mongoid.load!("config-mongoid.yml", settings.environment)
   end
 
   get '/' do
@@ -59,11 +55,13 @@ class Application < Sinatra::Base
   end
 
   get '/libraries' do
+    authorize!
     @libs = Library.all.order_by(:created_at => 'desc')
     # ProductRepresenter.for_collection.prepare(products)
     @disp_attrs = ['_id','built','name','created_at']
     slim :all_libraries
   end
+
 
   get '/jobs' do
     @unbuilt_libs = Library.where(:built=>false)

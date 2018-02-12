@@ -13,4 +13,4 @@ ADD . /usr/src/app
 
 RUN ls -hail
 
-CMD ["./entrypoint.sh"]
+ENTRYPOINT ["bundle", "exec","puma"]

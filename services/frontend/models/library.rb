@@ -1,5 +1,6 @@
 require 'mongoid'
-require 'roar'
+require 'bcrypt'
+require 'roar/json/hal'
 
 class User
     include Mongoid::Document
@@ -7,7 +8,14 @@ class User
 
     field :username, type: String
     field :email, type: String
+    field :password, type: String
+    field :admin, type: Boolean
     has_many :library
+
+    def check_pass(challenge)
+        true_pass = BCrypt::Password.new self.password
+        return true_pass == challenge
+    end
 end
 
 class Library
@@ -26,10 +34,10 @@ end
 
 module LibraryRepresenter
     include Roar::JSON::HAL
-  
+
     property :name
     property :created_at, :writeable=>false
-  
+
     link :self do
       "/library/#{id}"
     end
